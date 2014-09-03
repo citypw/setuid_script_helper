@@ -1,0 +1,59 @@
+Phreaker & Shawn the R0ck - Sep 4
+
+------------------------------------------------------------------------
+Requirement:
+
+A bunch of scripts are designed to do something, which only the "root"
+can do. But we don't want them run as "root". It will cause more risk
+in a complicated environment that we called "cloud".
+
+This kind of issue can be solved by setuid() if it's a binary
+program. Here, it's not. It's just some bash scripts. Even you put
+setuid flag onto the scripts, the *SHELL* program will drop privileges
+while it loads the scripts. So..that's the problem we have...........
+
+
+Implementation:
+
+We write a very simple program is called setuid_script_helper. You might
+find other similiar implementations in the cyberworld. Plz, let me
+know.
+
+Let's see an example here:
+------------------------------------------------------------------------
+
+Preparation:
+------------------------------------------------------------------------
+shawn@shawn-fortress /tmp/setuid_script_helper $ cd example/
+shawn@shawn-fortress /tmp/setuid_script_helper/example $ sudo ./run_me.sh 
+[sudo] password for shawn: 
+gcc -g   -o setuid_script_helper setuid_script_helper.c
+done
+/tmp/setuid_script_helper/example
+
+Run 2.sh as an unpriviledged user, it failed to run:
+------------------------------------------------------------------------
+shawn@shawn-fortress /tmp/setuid_script_helper/example $ ./2.sh 
+uid=1000(shawn) gid=1000(shawn) groups=1000(shawn),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),110(sambashare),1002(promiscuous)
+./2.sh: 4: ./2.sh: cannot create /proc/sys/kernel/randomize_va_space: Permission denied
+
+
+Use the *helper*:
+------------------------------------------------------------------------
+shawn@shawn-fortress /tmp/setuid_script_helper/example $ ./setuid_script_helper ./2.sh 
+Run script:[./2.sh]
+my uid: 0
+Set uid to 0 , return code is 0!
+uid=0(root) gid=1000(shawn) groups=0(root),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),110(sambashare),1000(shawn),1002(promiscuous)
+Script executed, return code is 0!
+------------------------------------------------------------------------
+
+
+There's only one thing you need to note about deploment file's
+permission( user:group):
+
+==> user: must be *root*
+==> group: must be the one you deployed, like *shawn*
+
+
+We'd like you buy you a beer if you improve this program;-)
