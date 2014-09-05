@@ -40,7 +40,7 @@ uid=1000(shawn) gid=1000(shawn) groups=1000(shawn),4(adm),24(cdrom),27(sudo),30(
 
 Use the *helper*:
 ------------------------------------------------------------------------
-shawn@shawn-fortress /tmp/setuid_script_helper/example $ ./setuid_script_helper ./2.sh 
+shawn@shawn-fortress /tmp/setuid_script_helper/example $ ./setuid_script_helper "./2.sh"
 Run script:[./2.sh]
 my uid: 0
 Set uid to 0 , return code is 0!

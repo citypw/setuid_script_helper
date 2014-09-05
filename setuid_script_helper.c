@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
 //	result = setlogmask(mask);
 
 	if (argc!=2) {
-		snprintf(message,512,"Parameters error!");
+		snprintf(message,512,"Usage: setuid_script_helper \"[arguments]\"");
 		printf("%s\n", message);
 		syslog(priority,"%s",message);
 		return -1;
