@@ -16,6 +16,7 @@ int main(int argc, char ** argv)
 	char *ident = "automationHelper";
 	
 	char message[512] = {0};
+	char cmd[512] = {0};
 
 	int logopt = LOG_PID | LOG_CONS;
 	int facility = LOG_USER;
@@ -27,7 +28,7 @@ int main(int argc, char ** argv)
 //	int mask = LOG_MASK (LOG_ERR);
 //	result = setlogmask(mask);
 
-	if (argc!=2) {
+	if (argc < 2 || argc > 3) {
 		snprintf(message,512,"Usage: setuid_script_helper \"[arguments]\"");
 		printf("%s\n", message);
 		syslog(priority,"%s",message);
@@ -63,7 +64,12 @@ int main(int argc, char ** argv)
 		/* do nothing */
 		}
 
-		result=system(argv[1]);
+		if( argc == 2)
+			snprintf(cmd, 512, "%s", argv[1]);
+		if( argc == 3)
+			snprintf(cmd, 512, "%s  %s", argv[1], argv[2]);
+
+		result=system(cmd);
 		snprintf(message,512,"Script executed, return code is %d!",result);
 		printf("%s\n", message);
 		syslog(priority,"%s",message);
